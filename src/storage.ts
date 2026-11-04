@@ -1,10 +1,10 @@
 import { dirname } from "node:path";
 import { emptyState, type AppState, type City } from "./types.ts";
 
-export const DEFAULT_DATA_FILE = "weather-data.json";
-
 export function resolveDataPath(env: Record<string, string | undefined> = process.env): string {
-  return env.WEATHER_APP_DATA_FILE?.trim() || DEFAULT_DATA_FILE;
+  if (env.WEATHER_APP_DATA_FILE?.trim()) return env.WEATHER_APP_DATA_FILE.trim();
+  const configHome = env.XDG_CONFIG_HOME?.trim() || `${env.HOME || "."}/.config`;
+  return `${configHome}/wheather-app/data.json`;
 }
 
 function isCity(value: unknown): value is City {
