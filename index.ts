@@ -16,7 +16,11 @@ function createTerminalIO(): CliIO {
           pending = pending.slice(lineEnd + 1);
           return line;
         }
-        if (finished) return pending ? pending : null;
+        if (finished) {
+          const line = pending;
+          pending = "";
+          return line || null;
+        }
         const chunk = await reader.read();
         if (chunk.done) {
           finished = true;
