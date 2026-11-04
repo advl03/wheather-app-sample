@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { runCli, type CliIO } from "./cli.ts";
+import { renderMenu, runCli, type CliIO } from "./cli.ts";
 import type { AppState, City } from "./types.ts";
 
 function fakeIO(inputs: string[]): { io: CliIO; output: string[] } {
@@ -16,6 +16,10 @@ function fakeIO(inputs: string[]): { io: CliIO; output: string[] } {
 const city = (id: string, name: string): City => ({ id, name, latitude: 1, longitude: 2 });
 
 describe("CLI", () => {
+  test("renders the menu with the stored city count", () => {
+    expect(renderMenu(1)).toContain("2. Clima de todas las ciudades (1)");
+  });
+
   test("adds first city as default and avoids duplicate", async () => {
     const { io, output } = fakeIO(["3", "Madrid", "3", "Madrid", "9"]);
     const state: AppState = { cities: [], defaultCityId: null, unit: "celsius" };

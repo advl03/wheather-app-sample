@@ -12,17 +12,19 @@ export interface CliDependencies {
   onMutation?: (state: AppState) => Promise<void> | void;
 }
 
-export const MENU = `════════════════════════════════════════
+export function renderMenu(cityCount: number): string {
+  return `════════════════════════════════════════
          WEATHER CLI
 ════════════════════════════════════════
   1. Clima de ciudad default
-  2. Clima de todas las ciudades
+  2. Clima de todas las ciudades (${cityCount})
   3. Buscar y agregar ciudad
   4. Eliminar ciudad
   5. Establecer ciudad default
   8. Ajustes (°C)
   9. Salir
 ════════════════════════════════════════`;
+}
 
 const errorMessage = (error: unknown): string => error instanceof Error ? error.message : "Error desconocido.";
 
@@ -136,7 +138,7 @@ export async function runCli(state: AppState, io: CliIO, dependencies: CliDepend
   };
   let running = true;
   while (running) {
-    io.writeLine(MENU);
+    io.writeLine(renderMenu(state.cities.length));
     const option = await io.readLine("Selecciona una opción: ");
     if (option === null) break;
     running = await handleOption(state, option.trim(), io, deps);
